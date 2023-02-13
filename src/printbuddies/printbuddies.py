@@ -162,7 +162,7 @@ class ProgBar:
         myList = [bar.display(return_object=i) for i in range(10)]"""
         if not self.timer.started:
             self.timer.start()
-        if counter_override:
+        if counter_override is not None:
             self.counter = counter_override
         if total_override:
             self.total = total_override
