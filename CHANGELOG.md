@@ -14,20 +14,14 @@
 #### Performance improvements
 
 * remove leading space when no prefix is passed to display
-* change update_frequency check value
 #### Refactorings
 
 * remove total property and start counter at 1 instead of 0
-* don't cast total to int in setter
 * improve type annotations
-* make total a class property
 #### Docs
 
 * update readme
 * improve display() doc string
-#### Others
-
-* remove stray comment
 
 
 ## v1.1.0 (2023-04-16)
