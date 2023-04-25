@@ -7,7 +7,7 @@ import printbuddies
 
 def test_printbuddies_display():
     print()
-    total = 100
+    total = 200
     bar = printbuddies.ProgBar(total)
     for _ in range(total):
         bar.display(prefix=bar.runtime)
@@ -15,7 +15,7 @@ def test_printbuddies_display():
     bar.reset()
     bar.update_frequency = 10
     for _ in range(total):
-        bar.display()
+        bar.display(suffix=bar.runtime)
         time.sleep(0.01)
     bar.reset()
     bar.update_frequency = 1
