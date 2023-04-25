@@ -108,14 +108,14 @@ class ProgBar:
         self.reset()
 
     @property
-    def total(self) -> int:
+    def total(self) -> int | float:
         return self._total
 
     @total.setter
-    def total(self, value: int):
+    def total(self, value: int | float):
         # self.display() updates the internal counter after updating the display
         # so counting to completion is actuall 0->total-1 rather than 1->total
-        self._total = int(value) - 1
+        self._total = value - 1
 
     def reset(self):
         self.counter = 0
