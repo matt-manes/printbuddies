@@ -1,1 +1,1 @@
-from .printbuddies import ProgBar, clear, print_in_place, ticker, Spinner
+from .printbuddies import ProgBar, Spinner, clear, print_in_place, ticker
