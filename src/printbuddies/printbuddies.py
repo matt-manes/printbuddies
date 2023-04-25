@@ -179,9 +179,13 @@ class ProgBar:
 
         e.g.
 
-        bar = ProgBar(10)
-
-        myList = [bar.display(return_object=i) for i in range(10)]"""
+        >>> bar = ProgBar(10)
+        >>> def square(x: int | float)->int|float:
+        >>>     return x * x
+        >>> myList = [bar.display(return_object=square(i)) for i in range(10)]
+        >>> <progress bar gets displayed>
+        >>> myList
+        >>> [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]"""
         if not self.timer.started:
             self.timer.start()
         if counter_override is not None:
