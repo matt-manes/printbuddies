@@ -32,3 +32,20 @@ def test_printbuddies_display():
         for i in range(total):
             bar.display(total_override=total * 0.5)
             time.sleep(0.01)
+
+
+def test_spinner():
+    print()
+    spinner = printbuddies.Spinner()
+
+    def spin():
+        for _ in range(30):
+            spinner.display()
+            time.sleep(0.1)
+
+    spin()
+    print()
+    spinner = printbuddies.Spinner(sequence=["~_~_~_~_~_~_", "_~_~_~_~_~_~"])
+    spin()
+    with printbuddies.Spinner() as spinner:
+        spin()
