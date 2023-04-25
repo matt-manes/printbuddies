@@ -66,6 +66,7 @@ class ProgBar:
     def __init__(
         self,
         total: float,
+        update_frequency: int = 1,
         fill_ch: str = "_",
         unfill_ch: str = "/",
         width_ratio: float = 0.75,
@@ -73,6 +74,16 @@ class ProgBar:
         clear_after_completion: bool = False,
     ):
         """:param total: The number of calls to reach 100% completion.
+
+        :param update_frequency: The progress bar will only update once every this number of calls to display().
+        The larger the value, the less performance impact ProgBar has on the loop in which it is called.
+        e.g.
+        >>> bar = ProgBar(100, update_frequency=10)
+        >>> for _ in range(100):
+        >>>     bar.display()
+
+        ^The progress bar in the terminal will only update once every ten calls, going from 0%->100% in 10% increments.
+        Note: If 'total' is not a multiple of 'update_frequency', the display will not show 100% completion when the loop finishes.
 
         :param fill_ch: The character used to represent the completed part of the bar.
 
@@ -87,6 +98,7 @@ class ProgBar:
         Note: if new_line_after_completion and clear_after_completion are both True, the line will be cleared
         then a call to print() will be made."""
         self.total = total
+        self.update_frequency = update_frequency
         self.fill_ch = fill_ch[0]
         self.unfill_ch = unfill_ch[0]
         self.width_ratio = width_ratio
@@ -169,13 +181,14 @@ class ProgBar:
         # Don't wanna divide by 0 there, pal
         while self.total <= 0:
             self.total += 1
-        self.prefix = prefix
-        self.suffix = suffix
-        self._prepare_bar()
-        self._trim_bar()
-        pad = " " * (self.terminal_width - len(self.bar))
-        width = get_terminal_size().columns
-        print(f"{self.bar}{pad}"[: width - 2], flush=True, end="\r")
+        if self.counter % self.update_frequency == 0:
+            self.prefix = prefix
+            self.suffix = suffix
+            self._prepare_bar()
+            self._trim_bar()
+            pad = " " * (self.terminal_width - len(self.bar))
+            width = get_terminal_size().columns
+            print(f"{self.bar}{pad}"[: width - 2], flush=True, end="\r")
         if self.counter >= self.total:
             self.timer.stop()
             if self.clear_after_completion:
