@@ -181,7 +181,7 @@ class ProgBar:
         # Don't wanna divide by 0 there, pal
         while self.total <= 0:
             self.total += 1
-        if self.counter % self.update_frequency == 0:
+        if self.counter % self.update_frequency == self.update_frequency - 1:
             self.prefix = prefix
             self.suffix = suffix
             self._prepare_bar()
