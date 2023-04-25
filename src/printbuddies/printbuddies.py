@@ -107,6 +107,16 @@ class ProgBar:
         self.timer = Timer()
         self.reset()
 
+    @property
+    def total(self) -> int:
+        return self._total
+
+    @total.setter
+    def total(self, value: int):
+        # self.display() updates the internal counter after updating the display
+        # so counting to completion is actuall 0->total-1 rather than 1->total
+        self._total = int(value) - 1
+
     def reset(self):
         self.counter = 0
         self.percent = ""
@@ -169,7 +179,7 @@ class ProgBar:
 
         e.g.
 
-        bar = ProgBar(9)
+        bar = ProgBar(10)
 
         myList = [bar.display(return_object=i) for i in range(10)]"""
         if not self.timer.started:
