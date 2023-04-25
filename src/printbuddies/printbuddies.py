@@ -216,3 +216,45 @@ class ProgBar:
                     print()
         self.counter += 1
         return return_object
+
+
+class Spinner:
+    """Prints one of a sequence of characters in order everytime display() is called.
+    The display function writes the new character to the same line, overwriting the previous character.
+    The sequence will be cycled through indefinitely.
+    If used as a context manager, the last printed character will be cleared upon exiting."""
+
+    def __init__(self, sequence: list[Any] | None = None):
+        """
+        :param sequence: Override the built in spin sequence."""
+        if sequence:
+            self.sequence = sequence
+        else:
+            self.sequence = ["/", "-", "\\"]
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args, **kwargs):
+        clear()
+
+    @property
+    def sequence(self) -> list[Any]:
+        return self._sequence
+
+    @sequence.setter
+    def sequence(self, character_list: list[Any]):
+        # Buffer each element with a leading space
+        # so that the character isn't obscured by the cursor
+        self._sequence = [" " + str(ch) for ch in character_list]
+
+    def _get_next(self) -> str:
+        """Pop the first element of self._sequence,
+        append it to the end, and return the element."""
+        ch = self.sequence.pop(0)
+        self.sequence.append(ch)
+        return ch
+
+    def display(self):
+        """Print the next character in the sequence."""
+        print_in_place(self._get_next())
