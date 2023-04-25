@@ -146,7 +146,7 @@ class ProgBar:
         self.width_ratio = original_width
 
     def get_bar(self):
-        return f"{self.prefix} [{self.filled}{self.unfilled}]-{self.percent}% {self.suffix}"
+        return f"{self.prefix}{' '*bool(self.prefix)}[{self.filled}{self.unfilled}]-{self.percent}% {self.suffix}"
 
     def display(
         self,
