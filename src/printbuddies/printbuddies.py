@@ -107,18 +107,8 @@ class ProgBar:
         self.timer = Timer()
         self.reset()
 
-    @property
-    def total(self) -> int | float:
-        return self._total
-
-    @total.setter
-    def total(self, value: int | float):
-        # self.display() updates the internal counter after updating the display
-        # so counting to completion is actuall 0->total-1 rather than 1->total
-        self._total = value - 1
-
     def reset(self):
-        self.counter = 0
+        self.counter = 1
         self.percent = ""
         self.prefix = ""
         self.suffix = ""
@@ -195,7 +185,7 @@ class ProgBar:
         # Don't wanna divide by 0 there, pal
         while self.total <= 0:
             self.total += 1
-        if self.counter % self.update_frequency == self.update_frequency - 1:
+        if self.counter % self.update_frequency == 0:  # self.update_frequency - 1:
             self.prefix = prefix
             self.suffix = suffix
             self._prepare_bar()
