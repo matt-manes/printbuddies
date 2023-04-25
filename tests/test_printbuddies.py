@@ -24,3 +24,11 @@ def test_printbuddies_display():
         time.sleep(0.01)
     bar.reset()
     [bar.display(return_object=time.sleep(0.01)) for _ in range(total)]
+    with printbuddies.ProgBar(total) as bar:
+        for i in range(total):
+            bar.display()
+            time.sleep(0.01)
+    with printbuddies.ProgBar(total) as bar:
+        for i in range(total):
+            bar.display(total_override=total * 0.5)
+            time.sleep(0.01)
