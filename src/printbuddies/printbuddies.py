@@ -104,6 +104,17 @@ class ProgBar:
         self.new_line_after_completion = new_line_after_completion
         self.clear_after_completion = clear_after_completion
         self.reset()
+        self.with_context = False
+
+    def __enter__(self):
+        self.with_context = True
+        return self
+
+    def __exit__(self, *args, **kwargs):
+        if self.clear_after_completion:
+            clear()
+        else:
+            print()
 
     def reset(self):
         self.counter = 1
@@ -198,9 +209,10 @@ class ProgBar:
             print(f"{self.bar}{pad}"[: width - 2], flush=True, end="\r")
         if self.counter >= self.total:
             self.timer.stop()
-            if self.clear_after_completion:
-                clear()
-            if self.new_line_after_completion:
-                print()
+            if not self.with_context:
+                if self.clear_after_completion:
+                    clear()
+                if self.new_line_after_completion:
+                    print()
         self.counter += 1
         return return_object
