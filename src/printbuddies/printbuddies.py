@@ -159,9 +159,9 @@ class ProgBar:
         self,
         prefix: str = "",
         suffix: str = "",
-        counter_override: float = None,
-        total_override: float = None,
-        return_object: Any = None,
+        counter_override: float | None = None,
+        total_override: float | None = None,
+        return_object: Any | None = None,
     ) -> Any:
         """Writes the progress bar to the terminal.
 
