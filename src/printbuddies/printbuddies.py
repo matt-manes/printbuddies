@@ -53,15 +53,14 @@ def ticker(info: list[str]):
 class ProgBar:
     """Self incrementing, dynamically sized progress bar.
 
-    Includes a Timer object from noiftimer that starts timing
-    on the first call to display and stops timing once
-    self.counter >= self.total.
-    It can be easily added to the progress bar display by calling
-    Timer's checkTime function and passing the value to the 'prefix' or 'suffix'
-    param of self.display():
+    Includes an internal timer that starts when this object is created.
+    It can be easily added to the progress bar display by adding
+    the 'runtime' property to display's prefix or suffix param:
 
-    bar = ProgBar(total=someTotal)
-    bar.display(prefix=f"Run time: {bar.timer.checkTime()}")"""
+    >>> bar = ProgBar(total=100)
+    >>> time.sleep(30)
+    >>> bar.display(prefix=bar.runtime)
+    >>> "runtime: 30s [_///////////////////]1.00%" """
 
     def __init__(
         self,
@@ -104,7 +103,6 @@ class ProgBar:
         self.width_ratio = width_ratio
         self.new_line_after_completion = new_line_after_completion
         self.clear_after_completion = clear_after_completion
-        self.timer = Timer()
         self.reset()
 
     def reset(self):
@@ -115,6 +113,11 @@ class ProgBar:
         self.filled = ""
         self.unfilled = ""
         self.bar = ""
+        self.timer = Timer(subsecond_resolution=False).start()
+
+    @property
+    def runtime(self) -> str:
+        return f"runtime:{self.timer.elapsed_str}"
 
     def get_percent(self) -> str:
         """Returns the percentage complete to two decimal places
