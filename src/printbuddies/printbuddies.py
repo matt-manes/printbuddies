@@ -143,7 +143,7 @@ class ProgBar:
     def _prepare_bar(self):
         self.terminal_width = get_terminal_size().columns - 1
         bar_length = int(self.terminal_width * self.width_ratio)
-        progress = int(bar_length * self.counter / self.total)
+        progress = int(bar_length * min(self.counter / self.total, 1.0))
         self.filled = self.fill_ch * progress
         self.unfilled = self.unfill_ch * (bar_length - progress)
         self.percent = self.get_percent()
