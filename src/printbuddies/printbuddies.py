@@ -222,15 +222,24 @@ class Spinner:
     """Prints one of a sequence of characters in order everytime display() is called.
     The display function writes the new character to the same line, overwriting the previous character.
     The sequence will be cycled through indefinitely.
-    If used as a context manager, the last printed character will be cleared upon exiting."""
+    If used as a context manager, the last printed character will be cleared upon exiting.
+    """
 
-    def __init__(self, sequence: list[Any] | None = None):
+    def __init__(self, sequence: list[Any] | None = None, width: int = 25):
         """
-        :param sequence: Override the built in spin sequence."""
+        :param sequence: Override the built in spin sequence.
+
+        :param width: The number of spaces for the sequence to move across."""
         if sequence:
             self.sequence = sequence
         else:
             self.sequence = ["/", "-", "\\"]
+        self.sequence = [
+            ch.rjust(i + j)
+            for i in range(1, width, len(self.sequence))
+            for j, ch in enumerate(self.sequence)
+        ]
+        self.sequence += self.sequence[::-1]
 
     def __enter__(self):
         return self
