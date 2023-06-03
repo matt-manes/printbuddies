@@ -225,7 +225,7 @@ class Spinner:
     If used as a context manager, the last printed character will be cleared upon exiting.
     """
 
-    def __init__(self, sequence: list[Any] | None = None, width: int = 25):
+    def __init__(self, sequence: list[Any] | None = None, width_ratio: float = 0.25):
         """
         :param sequence: Override the built in spin sequence.
 
@@ -234,6 +234,7 @@ class Spinner:
             self.sequence = sequence
         else:
             self.sequence = ["/", "-", "\\"]
+        width = int((get_terminal_size().columns - 1) * width_ratio)
         self.sequence = [
             ch.rjust(i + j)
             for i in range(1, width, len(self.sequence))
