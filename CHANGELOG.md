@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.3.0 (2023-06-03)
+
+#### New Features
+
+* add movement to Spinner
+* sequence width will update when the terminal width changes
+#### Refactorings
+
+* default character sequence is assigned as parameter default
+* change width parameter to width_ratio
+#### Others
+
+* add missing version prefix
+
+
 ## v1.2.0 (2023-04-25)
 
 #### New Features
