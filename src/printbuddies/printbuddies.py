@@ -220,17 +220,24 @@ class ProgBar:
 
 class Spinner:
     """Prints one of a sequence of characters in order everytime display() is called.
-    The display function writes the new character to the same line, overwriting the previous character.
-    The sequence will be cycled through indefinitely.
-    If used as a context manager, the last printed character will be cleared upon exiting."""
 
-    def __init__(self, sequence: list[Any] | None = None):
+    The display function writes the new character to the same line, overwriting the previous character.
+
+    The sequence will be cycled through indefinitely.
+
+    If used as a context manager, the last printed character will be cleared upon exiting.
+    """
+
+    def __init__(
+        self, sequence: list[str] = ["/", "-", "\\"], width_ratio: float = 0.25
+    ):
         """
-        :param sequence: Override the built in spin sequence."""
-        if sequence:
-            self.sequence = sequence
-        else:
-            self.sequence = ["/", "-", "\\"]
+        :param sequence: Override the built in spin sequence.
+
+        :param width: The fractional amount of the terminal for characters to move across."""
+        self._base_sequence = sequence
+        self.width_ratio = width_ratio
+        self.sequence = self._base_sequence
 
     def __enter__(self):
         return self
@@ -239,22 +246,40 @@ class Spinner:
         clear()
 
     @property
+    def width_ratio(self) -> float:
+        return self._width_ratio
+
+    @width_ratio.setter
+    def width_ratio(self, ratio: float):
+        self._width_ratio = ratio
+        self._update_width()
+
+    def _update_width(self):
+        self._current_terminal_width = get_terminal_size().columns
+        self._width = int((self._current_terminal_width - 1) * self.width_ratio)
+
+    @property
     def sequence(self) -> list[Any]:
         return self._sequence
 
     @sequence.setter
     def sequence(self, character_list: list[Any]):
-        # Buffer each element with a leading space
-        # so that the character isn't obscured by the cursor
-        self._sequence = [" " + str(ch) for ch in character_list]
+        self._sequence = [
+            ch.rjust(i + j)
+            for i in range(1, self._width, len(character_list))
+            for j, ch in enumerate(character_list)
+        ]
+        self._sequence += self._sequence[::-1]
 
     def _get_next(self) -> str:
-        """Pop the first element of self._sequence,
-        append it to the end, and return the element."""
+        """Pop the first element of self._sequence, append it to the end, and return the element."""
         ch = self.sequence.pop(0)
         self.sequence.append(ch)
         return ch
 
     def display(self):
         """Print the next character in the sequence."""
+        if get_terminal_size().columns != self._current_terminal_width:
+            self._update_width()
+            self.sequence = self._base_sequence
         print_in_place(self._get_next())
