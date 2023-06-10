@@ -4,7 +4,7 @@ A few utilities to do terminal printing tricks. <br>
 Install with:
 <pre>pip install printbuddies</pre>
 
-Contains one class and three functions: ProgBar, print_in_place, ticker, and clear.<br>
+Contains two classes and three functions: ProgBar, Spinner, print_in_place, ticker, and clear.<br>
 
 ### ProgBar
 
