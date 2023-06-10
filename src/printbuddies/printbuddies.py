@@ -16,17 +16,13 @@ def clear():
 
 
 def print_in_place(string: str, animate: bool = False, animate_refresh: float = 0.01):
-    """Calls to print_in_place will overwrite
-    the previous line of text in the terminal
-    with the 'string' param.
+    """Calls to `print_in_place` will overwrite the previous line of text in the terminal with `string`.
 
-    :param animate: Will cause the string
-    to be printed to the terminal
-    one character at a time.
+    #### :params:
 
-    :param animate_refresh: Number of seconds
-    between the addition of characters
-    when 'animate' is True."""
+    `animate`: Will cause `string` to be printed to the terminal one character at a time.
+
+    `animate_refresh`: Number of seconds between the addition of characters when `animate` is `True`."""
     clear()
     string = str(string)
     try:
@@ -45,13 +41,9 @@ def print_in_place(string: str, animate: bool = False, animate_refresh: float = 
 
 
 def ticker(info: list[str]):
-    """Prints info to terminal with
-    top and bottom padding so that repeated
-    calls print info without showing previous
-    outputs from ticker calls.
+    """Prints `info` to terminal with top and bottom padding so that previous text is not visible.
 
-    Similar visually to print_in_place,
-    but for multiple lines."""
+    Similar visually to `print_in_place`, but for multiple lines."""
     try:
         width = get_terminal_size().columns
         info = [str(line)[: width - 1] for line in info]
@@ -69,13 +61,13 @@ class ProgBar:
     """Self incrementing, dynamically sized progress bar.
 
     Includes an internal timer that starts when this object is created.
-    It can be easily added to the progress bar display by adding
-    the 'runtime' property to display's prefix or suffix param:
+
+    Easily add runtime to progress display:
 
     >>> bar = ProgBar(total=100)
     >>> time.sleep(30)
-    >>> bar.display(prefix=bar.runtime)
-    >>> "runtime: 30s [_///////////////////]1.00%" """
+    >>> bar.display(prefix=f"Doin stuff ~ {bar.runtime}")
+    >>> "Doin stuff ~ runtime: 30s [_///////////////////]-1.00%" """
 
     def __init__(
         self,
@@ -83,34 +75,37 @@ class ProgBar:
         update_frequency: int = 1,
         fill_ch: str = "_",
         unfill_ch: str = "/",
-        width_ratio: float = 0.75,
+        width_ratio: float = 0.5,
         new_line_after_completion: bool = True,
         clear_after_completion: bool = False,
     ):
-        """:param total: The number of calls to reach 100% completion.
+        """
+        #### :params:
 
-        :param update_frequency: The progress bar will only update once every this number of calls to display().
-        The larger the value, the less performance impact ProgBar has on the loop in which it is called.
+        `total`: The number of calls to reach 100% completion.
+
+        `update_frequency`: The progress bar will only update once every this number of calls to `display()`.
+        The larger the value, the less performance impact `ProgBar` has on the loop in which it is called.
         e.g.
         >>> bar = ProgBar(100, update_frequency=10)
         >>> for _ in range(100):
         >>>     bar.display()
 
         ^The progress bar in the terminal will only update once every ten calls, going from 0%->100% in 10% increments.
-        Note: If 'total' is not a multiple of 'update_frequency', the display will not show 100% completion when the loop finishes.
+        Note: If `total` is not a multiple of `update_frequency`, the display will not show 100% completion when the loop finishes.
 
-        :param fill_ch: The character used to represent the completed part of the bar.
+        `fill_ch`: The character used to represent the completed part of the bar.
 
-        :param unfill_ch: The character used to represent the uncompleted part of the bar.
+        `unfill_ch`: The character used to represent the incomplete part of the bar.
 
-        :param width_ratio: The width of the progress bar relative to the width of the terminal window.
+        `width_ratio`: The width of the progress bar relative to the width of the terminal window.
 
-        :param new_line_after_completion: Make a call to print() once self.counter >= self.total.
+        `new_line_after_completion`: Make a call to `print()` once `self.counter >= self.total`.
 
-        :param clear_after_completion: Make a call to printbuddies.clear() once self.counter >= self.total.
+        `clear_after_completion`: Make a call to `printbuddies.clear()` once `self.counter >= self.total`.
 
-        Note: if new_line_after_completion and clear_after_completion are both True, the line will be cleared
-        then a call to print() will be made."""
+        Note: if `new_line_after_completion` and `clear_after_completion` are both `True`, the line will be cleared
+        then a call to `print()` will be made."""
         self.total = total
         self.update_frequency = update_frequency
         self.fill_ch = fill_ch[0]
@@ -149,8 +144,7 @@ class ProgBar:
         return f"{self.prefix}{' '*bool(self.prefix)}[{self.filled}{self.unfilled}]-{self.percent}% {self.suffix}"
 
     def get_percent(self) -> str:
-        """Returns the percentage complete to two decimal places
-        as a string without the %."""
+        """Returns the percentage completed to two decimal places as a string without the `%`."""
         percent = str(round(100.0 * self.counter / self.total, 2))
         if len(percent.split(".")[1]) == 1:
             percent = percent + "0"
@@ -186,17 +180,18 @@ class ProgBar:
     ) -> Any:
         """Writes the progress bar to the terminal.
 
-        :param prefix: String affixed to the front of the progress bar.
+        #### :params:
 
-        :param suffix: String appended to the end of the progress bar.
+        `prefix`: String affixed to the front of the progress bar.
 
-        :param counter_override: When an externally incremented completion counter is needed.
+        `suffix`: String appended to the end of the progress bar.
 
-        :param total_override: When an externally controlled bar total is needed.
+        `counter_override`: When an externally incremented completion counter is needed.
 
-        :param return_object: An object to be returned by display().
+        `total_override`: When an externally controlled bar total is needed.
 
-        Allows display() to be called within a comprehension:
+        `return_object`: An object to be returned by display().
+        Allows `display()` to be called within a comprehension:
 
         e.g.
 
@@ -241,9 +236,9 @@ class ProgBar:
 
 
 class Spinner:
-    """Prints one of a sequence of characters in order everytime display() is called.
+    """Prints one of a sequence of characters in order everytime `display()` is called.
 
-    The display function writes the new character to the same line, overwriting the previous character.
+    The `display` function writes the new character to the same line, overwriting the previous character.
 
     The sequence will be cycled through indefinitely.
 
@@ -254,9 +249,11 @@ class Spinner:
         self, sequence: list[str] = ["/", "-", "\\"], width_ratio: float = 0.25
     ):
         """
-        :param sequence: Override the built in spin sequence.
+        #### params:
 
-        :param width: The fractional amount of the terminal for characters to move across."""
+        `sequence`: Override the built in spin sequence.
+
+        `width_ratio`: The fractional amount of the terminal for characters to move across."""
         self._base_sequence = sequence
         self.width_ratio = width_ratio
         self.sequence = self._base_sequence
@@ -294,7 +291,7 @@ class Spinner:
         self._sequence += self._sequence[::-1]
 
     def _get_next(self) -> str:
-        """Pop the first element of self._sequence, append it to the end, and return the element."""
+        """Pop the first element of `self._sequence`, append it to the end, and return the element."""
         ch = self.sequence.pop(0)
         self.sequence.append(ch)
         return ch
