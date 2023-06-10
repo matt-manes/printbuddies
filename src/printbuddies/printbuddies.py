@@ -7,7 +7,12 @@ from noiftimer import Timer
 
 def clear():
     """Erase the current line from the terminal."""
-    print(" " * (get_terminal_size().columns - 1), flush=True, end="\r")
+    try:
+        print(" " * (get_terminal_size().columns - 1), flush=True, end="\r")
+    except OSError:
+        ...
+    except Exception as e:
+        raise e
 
 
 def print_in_place(string: str, animate: bool = False, animate_refresh: float = 0.01):
@@ -24,14 +29,19 @@ def print_in_place(string: str, animate: bool = False, animate_refresh: float = 
     when 'animate' is True."""
     clear()
     string = str(string)
-    width = get_terminal_size().columns
-    string = string[: width - 2]
-    if animate:
-        for i in range(len(string)):
-            print(f"{string[:i+1]}", flush=True, end=" \r")
-            sleep(animate_refresh)
-    else:
-        print(string, flush=True, end="\r")
+    try:
+        width = get_terminal_size().columns
+        string = string[: width - 2]
+        if animate:
+            for i in range(len(string)):
+                print(f"{string[:i+1]}", flush=True, end=" \r")
+                sleep(animate_refresh)
+        else:
+            print(string, flush=True, end="\r")
+    except OSError:
+        ...
+    except Exception as e:
+        raise e
 
 
 def ticker(info: list[str]):
@@ -42,12 +52,17 @@ def ticker(info: list[str]):
 
     Similar visually to print_in_place,
     but for multiple lines."""
-    width = get_terminal_size().columns
-    info = [str(line)[: width - 1] for line in info]
-    height = get_terminal_size().lines - len(info)
-    print("\n" * (height * 2), end="")
-    print(*info, sep="\n", end="")
-    print("\n" * (int((height) / 2)), end="")
+    try:
+        width = get_terminal_size().columns
+        info = [str(line)[: width - 1] for line in info]
+        height = get_terminal_size().lines - len(info)
+        print("\n" * (height * 2), end="")
+        print(*info, sep="\n", end="")
+        print("\n" * (int((height) / 2)), end="")
+    except OSError:
+        ...
+    except Exception as e:
+        raise e
 
 
 class ProgBar:
@@ -199,22 +214,27 @@ class ProgBar:
         # Don't wanna divide by 0 there, pal
         while self.total <= 0:
             self.total += 1
-        if self.counter % self.update_frequency == 0:
-            self.prefix = prefix
-            self.suffix = suffix
-            self._prepare_bar()
-            self._trim_bar()
-            pad = " " * (self.terminal_width - len(self.bar))
-            width = get_terminal_size().columns
-            print(f"{self.bar}{pad}"[: width - 2], flush=True, end="\r")
-        if self.counter >= self.total:
-            self.timer.stop()
-            if not self.with_context:
-                if self.clear_after_completion:
-                    clear()
-                if self.new_line_after_completion:
-                    print()
-        self.counter += 1
+        try:
+            if self.counter % self.update_frequency == 0:
+                self.prefix = prefix
+                self.suffix = suffix
+                self._prepare_bar()
+                self._trim_bar()
+                pad = " " * (self.terminal_width - len(self.bar))
+                width = get_terminal_size().columns
+                print(f"{self.bar}{pad}"[: width - 2], flush=True, end="\r")
+            if self.counter >= self.total:
+                self.timer.stop()
+                if not self.with_context:
+                    if self.clear_after_completion:
+                        clear()
+                    if self.new_line_after_completion:
+                        print()
+            self.counter += 1
+        except OSError:
+            ...
+        except Exception as e:
+            raise e
         return return_object
 
 
@@ -279,7 +299,12 @@ class Spinner:
 
     def display(self):
         """Print the next character in the sequence."""
-        if get_terminal_size().columns != self._current_terminal_width:
-            self._update_width()
-            self.sequence = self._base_sequence
-        print_in_place(self._get_next())
+        try:
+            if get_terminal_size().columns != self._current_terminal_width:
+                self._update_width()
+                self.sequence = self._base_sequence
+            print_in_place(self._get_next())
+        except OSError:
+            ...
+        except Exception as e:
+            raise e
