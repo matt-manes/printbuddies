@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.3.1 (2023-06-10)
+
+#### Fixes
+
+* add exception handling to prevent crashing when there is no terminal
+#### Refactorings
+
+* make ProgBar.bar a property
+#### Docs
+
+* update readme
+* update and improve docstrings
 ## v1.3.0 (2023-06-03)
 
 #### New Features
