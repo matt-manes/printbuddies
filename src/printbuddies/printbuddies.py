@@ -138,12 +138,15 @@ class ProgBar:
         self.suffix = ""
         self.filled = ""
         self.unfilled = ""
-        self.bar = ""
         self.timer = Timer(subsecond_resolution=False).start()
 
     @property
     def runtime(self) -> str:
         return f"runtime:{self.timer.elapsed_str}"
+
+    @property
+    def bar(self) -> str:
+        return f"{self.prefix}{' '*bool(self.prefix)}[{self.filled}{self.unfilled}]-{self.percent}% {self.suffix}"
 
     def get_percent(self) -> str:
         """Returns the percentage complete to two decimal places
@@ -162,7 +165,6 @@ class ProgBar:
         self.filled = self.fill_ch * progress
         self.unfilled = self.unfill_ch * (bar_length - progress)
         self.percent = self.get_percent()
-        self.bar = self.get_bar()
 
     def _trim_bar(self):
         original_width = self.width_ratio
