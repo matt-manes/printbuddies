@@ -4,39 +4,26 @@ build-backend = "hatchling.build"
 
 [project]
 name = "printbuddies"
-authors = [{name="Matt Manes"}]
 description = "Handful of utilities to do printing tricks to the terminal."
-version = "1.3.1"
+version = "1.4.0"
 requires-python = ">=3.10"
 dependencies = ["noiftimer", "pytest"]
 readme = "README.md"
-keywords = [
-    "terminal",
-    "print",
-    "printing",
-    "progressbar"
-]
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-]
+keywords = ["terminal", "print", "printing", "progressbar"]
+classifiers = ["Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License", "Operating System :: OS Independent"]
+
+[[project.authors]]
+name = "Matt Manes"
 
 [project.urls]
-"Homepage" = "https://github.com/matt-manes/printbuddies"
-"Documentation" = "https://github.com/matt-manes/printbuddies/tree/main/docs"
+Homepage = "https://github.com/matt-manes/printbuddies"
+Documentation = "https://github.com/matt-manes/printbuddies/tree/main/docs"
 "Source code" = "https://github.com/matt-manes/printbuddies/tree/main/src/printbuddies"
 
+[tool]
 [tool.pytest.ini_options]
-addopts = [
-    "--import-mode=importlib",
-]
+addopts = ["--import-mode=importlib"]
 pythonpath = "src"
 
 [tool.hatch.build.targets.sdist]
-exclude = [
-    ".coverage",
-    ".pytest_cache",
-    ".vscode",
-    "tests"
-]
+exclude = [".coverage", ".pytest_cache", ".vscode", "tests"]

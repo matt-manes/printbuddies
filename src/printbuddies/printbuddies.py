@@ -1,7 +1,8 @@
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from os import get_terminal_size
 from time import sleep
 from typing import Any, Callable
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+
 from noiftimer import Timer
 
 
