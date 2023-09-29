@@ -36,6 +36,20 @@ print(myList)
 
 ProgBar also supports being used with a context manager.
 
+
+### PoolBar
+
+A convenience class to integrate `concurrent.futures.ThreadPoolExecutor` and `concurrent.futures.ProcessPoolExecutor` with `ProgBar`.<br>
+Constructor takes the pool executor type, a list of functions to execute, and an optional list of args for those functions.<br>
+The `execute()` method returns a list of whatever those functions return.<br>
+`execute()` can also take any optional `ProgBar` constructor arguments.
+<pre>
+def my_func(page: int)->str:
+    return requests.get(f"https://somesite.com/pages/{page}").text
+pool = PoolBar("thread", [my_func for _ in range(10)], [(i,) for i in range(10)])
+pages = pool.execute(width_ratio=0.75)
+</pre>
+
 ### Spinner
 
 This class will print the next character from a sequence every time it's `display` method is called, clearing whatever is currently on the line.<br>
