@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.0 (2023-09-29)
+
+#### New Features
+
+* add thread/process pool executor and ProgBar integration class
+
 ## v1.3.1 (2023-06-10)
 
 #### Fixes
