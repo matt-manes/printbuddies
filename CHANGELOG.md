@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.4.1 (2023-09-29)
+
+#### Fixes
+
+* fix type annotation in PoolBar constructor
+
 ## v1.4.0 (2023-09-29)
 
 #### New Features
