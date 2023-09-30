@@ -240,7 +240,7 @@ class PoolBar:
     def __init__(
         self,
         pool_type: str,
-        funcs: list[Callable[[Any], list[Any]]],
+        funcs: list[Callable[[Any], Any]],
         args: list[tuple[Any, ...]] | None = None,
     ):
         """Integrates multi thread/process execution with `ProgBar`.
