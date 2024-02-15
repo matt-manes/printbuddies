@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.5.0 (2024-02-14)
+
+#### New Features
+
+* add support for using `rich` formatted strings
+
+
 ## v1.4.1 (2023-09-29)
 
 #### Fixes
