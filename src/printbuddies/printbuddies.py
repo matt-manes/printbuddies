@@ -3,8 +3,8 @@ from os import get_terminal_size
 from time import sleep
 from typing import Any, Callable
 
-from noiftimer import Timer
 import rich
+from noiftimer import Timer
 
 
 def clear():
