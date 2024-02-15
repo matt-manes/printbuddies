@@ -4,6 +4,7 @@ from time import sleep
 from typing import Any, Callable
 
 from noiftimer import Timer
+import rich
 
 
 def clear():
@@ -16,19 +17,33 @@ def clear():
         raise e
 
 
-def print_in_place(string: str, animate: bool = False, animate_refresh: float = 0.01):
+def print_in_place(
+    string: str,
+    animate: bool = False,
+    animate_refresh: float = 0.01,
+    use_rich: bool = True,
+    truncate: bool = True,
+):
     """Calls to `print_in_place` will overwrite the previous line of text in the terminal with `string`.
 
     #### :params:
 
     `animate`: Will cause `string` to be printed to the terminal one character at a time.
 
-    `animate_refresh`: Number of seconds between the addition of characters when `animate` is `True`."""
+    `animate_refresh`: Number of seconds between the addition of characters when `animate` is `True`.
+
+    `use_rich`: Use `rich` package to print `string`.
+
+    `truncate`: Truncate strings that are wider than the terminal window.
+    """
     clear()
     string = str(string)
+    if use_rich:
+        print = rich.print
     try:
         width = get_terminal_size().columns
-        string = string[: width - 2]
+        if truncate:
+            string = string[: width - 2]
         if animate:
             for i in range(len(string)):
                 print(f"{string[:i+1]}", flush=True, end=" \r")
@@ -41,13 +56,21 @@ def print_in_place(string: str, animate: bool = False, animate_refresh: float = 
         raise e
 
 
-def ticker(info: list[str]):
+def ticker(info: list[str], use_rich: bool = True, truncate: bool = True):
     """Prints `info` to terminal with top and bottom padding so that previous text is not visible.
 
-    Similar visually to `print_in_place`, but for multiple lines."""
+    Similar visually to `print_in_place`, but for multiple lines.
+
+    #### :params:
+
+    `use_rich`: Use `rich` package to print `string`.
+
+    `truncate`: Truncate strings that are wider than the terminal window."""
+    if use_rich:
+        print = rich.print
     try:
         width = get_terminal_size().columns
-        info = [str(line)[: width - 1] for line in info]
+        info = [str(line)[: width - 1] if truncate else str(line) for line in info]
         height = get_terminal_size().lines - len(info)
         print("\n" * (height * 2), end="")
         print(*info, sep="\n", end="")
@@ -284,7 +307,8 @@ class PoolBar:
     def execute(self, *progbar_args, **progbar_kwargs) -> list[Any]:
         """Execute the supplied functions with their supplied arguments, if any.
 
-        `*progbar_args` and `**progbar_kwargs` can be any arguments the `ProgBar` constructor takes besides `total`."""
+        `*progbar_args` and `**progbar_kwargs` can be any arguments the `ProgBar` constructor takes besides `total`.
+        """
         num_workers = len(self.funcs)
         with ProgBar(num_workers, *progbar_args, **progbar_kwargs) as bar:
             with self._get_executor()() as executor:
@@ -322,7 +346,8 @@ class Spinner:
 
         `sequence`: Override the built in spin sequence.
 
-        `width_ratio`: The fractional amount of the terminal for characters to move across."""
+        `width_ratio`: The fractional amount of the terminal for characters to move across.
+        """
         self._base_sequence = sequence
         self.width_ratio = width_ratio
         self.sequence = self._base_sequence
