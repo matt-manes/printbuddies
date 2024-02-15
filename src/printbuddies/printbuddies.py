@@ -1,7 +1,6 @@
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from os import get_terminal_size
 from time import sleep
-from typing import Any, Callable
+from typing import Any
 
 import rich
 from noiftimer import Timer
@@ -60,6 +59,8 @@ def ticker(info: list[str], use_rich: bool = True, truncate: bool = True):
     """Prints `info` to terminal with top and bottom padding so that previous text is not visible.
 
     Similar visually to `print_in_place`, but for multiple lines.
+
+    #### *** Leaving this here for backwards compatibility, but just use `rich.Live` instead ***
 
     #### :params:
 
@@ -259,75 +260,6 @@ class ProgBar:
         return return_object
 
 
-class PoolBar:
-    def __init__(
-        self,
-        pool_type: str,
-        funcs: list[Callable[[Any], Any]],
-        args: list[tuple[Any, ...]] | None = None,
-    ):
-        """Integrates multi thread/process execution with `ProgBar`.
-
-        #### :params:
-
-        `pool_type`: Should be either `thread` or `process`.
-
-        `funcs`: List of functions to be executed.
-
-        `args`: A list of tuples where each tuple is the args to be used with each function.
-
-        Returns a list of whatever results the functions in `funcs` return.
-
-        >>> def my_func(page: int)->str:
-        >>>     return requests.get(f"https://somesite.com/pages/{page}").text
-        >>> pool = PoolBar("thread", [my_func for _ in range(10)], [(i,) for i in range(10)])
-        >>> pages = pool.execute()"""
-
-        self.pool_type = pool_type
-        self.funcs = funcs
-        self.args = args
-
-    @property
-    def pool_type(self) -> str:
-        return self._pool_type
-
-    @pool_type.setter
-    def pool_type(self, pool_type: str):
-        if pool_type not in ["thread", "process"]:
-            raise ValueError(f"pool_type '{pool_type}' must be 'thread' or 'process'.")
-        self._pool_type = pool_type
-
-    def _get_executor(self) -> ThreadPoolExecutor | ProcessPoolExecutor:
-        match self.pool_type:
-            case "thread":
-                return ThreadPoolExecutor
-            case "process":
-                return ProcessPoolExecutor
-
-    def execute(self, *progbar_args, **progbar_kwargs) -> list[Any]:
-        """Execute the supplied functions with their supplied arguments, if any.
-
-        `*progbar_args` and `**progbar_kwargs` can be any arguments the `ProgBar` constructor takes besides `total`.
-        """
-        num_workers = len(self.funcs)
-        with ProgBar(num_workers, *progbar_args, **progbar_kwargs) as bar:
-            with self._get_executor()() as executor:
-                if self.args:
-                    workers = [
-                        executor.submit(func, *args)
-                        for func, args in zip(self.funcs, self.args)
-                    ]
-                else:
-                    workers = [executor.submit(func) for func in self.funcs]
-                while (
-                    num_complete := len([worker for worker in workers if worker.done()])
-                ) < num_workers:
-                    bar.display(f"{bar.runtime}", counter_override=num_complete)
-                    sleep(0.1)
-            bar.display(f"{bar.runtime}", counter_override=num_complete)
-        return [worker.result() for worker in workers]
-
-
 class Spinner:
     """Prints one of a sequence of characters in order everytime `display()` is called.
 
@@ -336,6 +268,8 @@ class Spinner:
     The sequence will be cycled through indefinitely.
 
     If used as a context manager, the last printed character will be cleared upon exiting.
+
+    #### *** Leaving this here for backwards compatibility, but just use `rich.console.Console().status()` instead ***
     """
 
     def __init__(
