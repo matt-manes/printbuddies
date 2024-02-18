@@ -1,5 +1,5 @@
 from datetime import timedelta
-from typing import Any, Callable, Iterable, Optional, Sequence, Self
+from typing import Any, Callable, Iterable, Optional, Self, Sequence
 
 import rich.progress
 from noiftimer import Timer
