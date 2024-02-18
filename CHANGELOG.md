@@ -1,5 +1,17 @@
 # Changelog
 
+## v2.0.2 (2024-02-18)
+
+#### Fixes
+
+* fix type checker not recognizing `add_task` override
+#### Refactorings
+
+* make `track` uses same default columns as `Progress`
+* make progbar tests faster
+* remove unneeded `Progress.__init__()` override
+
+
 ## v2.0.1 (2024-02-18)
 
 #### Refactorings
