@@ -1,10 +1,10 @@
 from datetime import timedelta
-from typing import Any, Callable, Iterable, Optional, Sequence, TypeVar
+from typing import Any, Callable, Iterable, Optional, Sequence
 
 import rich.progress
 from noiftimer import Timer
 from rich.console import Console
-from rich.progress import ProgressColumn, ProgressType
+from rich.progress import ProgressType
 from rich.style import StyleType
 from rich.text import Text
 
@@ -16,6 +16,7 @@ def get_bar_column() -> rich.progress.BarColumn:
         style="sea_green1",
         complete_style="deep_pink1",
         finished_style="cornflower_blue",
+        pulse_style="deep_pink1",
     )
 
 
@@ -148,7 +149,7 @@ def track(
     style: StyleType = "sea_green1",
     complete_style: StyleType = "deep_pink1",
     finished_style: StyleType = "cornflower_blue",
-    pulse_style: StyleType = "bar.pulse",
+    pulse_style: StyleType = "deep_pink1",
     update_period: float = 0.1,
     disable: bool = False,
     show_speed: bool = True,
