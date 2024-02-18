@@ -1,6 +1,7 @@
 from os import get_terminal_size
 from time import sleep
 from typing import Any
+import re
 
 import rich
 from noiftimer import Timer
@@ -17,26 +18,26 @@ def clear():
 
 
 def print_in_place(
-    string: str,
+    text: Any,
     animate: bool = False,
     animate_refresh: float = 0.01,
     use_rich: bool = True,
-    truncate: bool = True,
+    truncate: bool = False,
 ):
     """Calls to `print_in_place` will overwrite the previous line of text in the terminal with `string`.
 
     #### :params:
 
-    `animate`: Will cause `string` to be printed to the terminal one character at a time.
+    `animate`: Will cause `text` to be printed to the terminal one character at a time.
 
     `animate_refresh`: Number of seconds between the addition of characters when `animate` is `True`.
 
-    `use_rich`: Use `rich` package to print `string`.
+    `use_rich`: Use `rich` package to print `text`.
 
     `truncate`: Truncate strings that are wider than the terminal window.
     """
     clear()
-    string = str(string)
+    string: str = str(text)
     if use_rich:
         print = rich.print
     try:
@@ -45,10 +46,11 @@ def print_in_place(
             string = string[: width - 2]
         if animate:
             for i in range(len(string)):
-                print(f"{string[:i+1]}", flush=True, end=" \r")
+                s = string[: i + 1]
+                print(s, flush=True, end=" \r")  # type: ignore
                 sleep(animate_refresh)
         else:
-            print(string, flush=True, end="\r")
+            print(string, flush=True, end="\r")  # type: ignore
     except OSError:
         ...
     except Exception as e:
@@ -73,9 +75,9 @@ def ticker(info: list[str], use_rich: bool = True, truncate: bool = True):
         width = get_terminal_size().columns
         info = [str(line)[: width - 1] if truncate else str(line) for line in info]
         height = get_terminal_size().lines - len(info)
-        print("\n" * (height * 2), end="")
-        print(*info, sep="\n", end="")
-        print("\n" * (int((height) / 2)), end="")
+        print("\n" * (height * 2), end="")  # type: ignore
+        print(*info, sep="\n", end="")  # type: ignore
+        print("\n" * (int((height) / 2)), end="")  # type: ignore
     except OSError:
         ...
     except Exception as e:
@@ -145,7 +147,7 @@ class ProgBar:
         self.with_context = True
         return self
 
-    def __exit__(self, *args, **kwargs):
+    def __exit__(self, *args: Any, **kwargs: Any):
         if self.clear_after_completion:
             clear()
         else:
@@ -289,7 +291,7 @@ class Spinner:
     def __enter__(self):
         return self
 
-    def __exit__(self, *args, **kwargs):
+    def __exit__(self, *args: Any, **kwargs: Any):
         clear()
 
     @property

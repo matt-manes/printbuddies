@@ -1,6 +1,6 @@
+import random
 import time
 
-import pytest
 
 import printbuddies
 

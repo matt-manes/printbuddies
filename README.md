@@ -1,74 +1,9 @@
 # printbuddies
 
-A few utilities to do terminal printing tricks. <br>
+Various printing utilities and helpers/extenders for the `rich` package. <br>
 Install with:
 <pre>pip install printbuddies</pre>
 
-Contains two classes and three functions: ProgBar, Spinner, print_in_place, ticker, and clear.<br>
-
-### ProgBar
-
-ProgBar is a self-incrementing, dynamically sized progress bar.<br>
-The progress counter and completion values can be manually overriden if desired.<br>
-The width of the progress bar is set according to a ratio of the terminal width
-so it will be resized automatically if the terminal width is changed.<br>
-
-<pre>
-from printbuddies import ProgBar
-total = 100
-bar = ProgBar(total=total)
-for _ in range(total):
-    bar.display()
-bar.reset()
-my_list = [bar.display(return_object=i) for i in range(total)]
-</pre>
-
-The display function has a 'return_object' parameter, allowing ProgBar to be used in comprehensions.
-<pre>
-bar = ProgBar(10)
-def square(x: int | float)->int|float:
-    return x * x
-myList = [bar.display(return_object=square(i)) for i in range(10)]
-{progress bar gets displayed}
-print(myList)
-[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
-</pre>
-
-ProgBar also supports being used with a context manager.
-
-
-### PoolBar
-
-A convenience class to integrate `concurrent.futures.ThreadPoolExecutor` and `concurrent.futures.ProcessPoolExecutor` with `ProgBar`.<br>
-Constructor takes the pool executor type, a list of functions to execute, and an optional list of args for those functions.<br>
-The `execute()` method returns a list of whatever those functions return.<br>
-`execute()` can also take any optional `ProgBar` constructor arguments.
-<pre>
-def my_func(page: int)->str:
-    return requests.get(f"https://somesite.com/pages/{page}").text
-pool = PoolBar("thread", [my_func for _ in range(10)], [(i,) for i in range(10)])
-pages = pool.execute(width_ratio=0.75)
-</pre>
-
-### Spinner
-
-This class will print the next character from a sequence every time it's `display` method is called, clearing whatever is currently on the line.<br>
-The characters will be cycled through indefinitely.<br>
-<pre>
-from printbuddies import Spinner
-spinner = Spinner()
-for _ in range(10):
-    spinner.display()
-</pre>
-
-The default character sequence can be overridden:
-<pre>
-spinner = Spinner(sequence=["~_~_~_~_~_~_", "_~_~_~_~_~_~"])
-for _ in range(10):
-    spinner.display()
-</pre>
-
-When used with a context manager, the last character printed will be cleared from the terminal upon exiting.
 
 ### print_in_place
 
@@ -83,19 +18,44 @@ for i in range(100):
     time.sleep(0.1)
 </pre>
 
-### ticker
+### Tag
 
-'ticker' prints a list of strings to the terminal with empty lines above and below
-such that previous text in the terminal is no longer visible.<br>
-Visually, It functions as a multi-line version of print_in_place.<br>
+The `Tag` class is essentially a wrapper to shorten using `rich` tags.  
+When a `Tag` is casted to a string it is formatted with surrounding square brackets 
+and the `o` or `off` properties can be accessed to return the matching closing tag.  
+
 <pre>
-from printbuddies import ticker
-import time
-#This will produce visually the same output as the above example
-for i in range(100):
-    ticker([i])
-    time.sleep(0.1)
+from printbuddies import Tag
+p = Tag("pale_turquoise4")
+c = Tag("cornflower_blue")
+s = f"{p}This{p.o} {c}is{c.o} {p}a{p.o} {c}string"
 </pre>
 
-### clear
-A call to `printbuddies.clear()` simply clears the current line from the terminal.
+is equivalent to
+
+<pre>
+s = "[pale_turquoise4]This[/pale_turquoise4] [cornflower_blue]is[/cornflower_blue] [pale_turquoise4]a[/pale_turquoise4] [cornflower_blue]string"
+</pre>
+
+---
+The `ColorMap` class contains two `Tag` properties for each 
+[named color](https://rich.readthedocs.io/en/latest/appendix/colors.html) 
+(except shades of grey, those only have a full name property):
+one that's the full name of the color and one that's an abbreviated name, for convenience.  
+
+This is useful for seeing color options using autocomplete:
+![](imgs/autocomplete.png)
+
+The class also supports iterating over the tags as well as selecting random colors:
+![](imgs/iteration.png)
+
+---
+The `Gradient` class inherits from `list` and can be used to easily apply an arbitrary number of color sweeps across text:
+![](imgs/gradient.png)
+
+The `Progress` class and `track` function are the same as the `rich` versions, just with different default colors and columns.  
+`TimerColumn` is a subclass of `rich.progress.TimeRemainingColumn` that displays `{time_elapsed}<->{time_remaining}` with a color gradient.  
+The progress bar and task progress columns with the altered default can be obtained with `get_bar_column()` and `get_task_progress_column`, respectively.  
+
+Default columns and colors of this version:
+![](imgs/progress.gif)
