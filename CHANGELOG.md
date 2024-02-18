@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.0.0 (2024-02-17)
+
+#### New Features
+
+* add helpers and default overrides for rich package
+#### Refactorings
+
+* BREAKING - remove poolbar
+
+
 ## v1.5.0 (2024-02-14)
 
 #### New Features
