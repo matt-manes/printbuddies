@@ -4,8 +4,8 @@ from .gradient import RGB, Gradient
 from .progress import (
     Progress,
     TimerColumn,
-    get_bar_column,
-    get_task_progress_column,
+    BarColumn,
+    TaskProgressColumn,
     track,
 )
 
@@ -24,6 +24,6 @@ __all__ = [
     "RGB",
     "Progress",
     "TimerColumn",
-    "get_bar_column",
-    "get_task_progress_column",
+    "BarColumn",
+    "TaskProgressColumn",
 ]

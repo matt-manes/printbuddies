@@ -1,31 +1,76 @@
 from datetime import timedelta
-from typing import Any, Callable, Iterable, Optional, Self, Sequence
+from typing import Any, Callable, Iterable, Literal, Optional, Self, Sequence
 
 import rich.progress
 from noiftimer import Timer
 from rich.console import Console
+from rich.highlighter import Highlighter
 from rich.progress import ProgressType
-from rich.style import StyleType
+from rich.style import Style, StyleType
+from rich.table import Column
 from rich.text import Text
+from rich import filesize
 
 from .gradient import Gradient
 
 
-def get_bar_column() -> rich.progress.BarColumn:
-    return rich.progress.BarColumn(
-        style="sea_green1",
-        complete_style="deep_pink1",
-        finished_style="cornflower_blue",
-        pulse_style="deep_pink1",
-    )
+class BarColumn(rich.progress.BarColumn):
+    def __init__(
+        self,
+        bar_width: int | None = 40,
+        style: str | Style = "sea_green1",
+        complete_style: str | Style = "deep_pink1",
+        finished_style: str | Style = "cornflower_blue",
+        pulse_style: str | Style = "deep_pink1",
+        table_column: Column | None = None,
+    ) -> None:
+        super().__init__(
+            bar_width, style, complete_style, finished_style, pulse_style, table_column
+        )
 
 
-def get_task_progress_column(
-    *args: Any, **kwargs: Any
-) -> rich.progress.TaskProgressColumn:
-    return rich.progress.TaskProgressColumn(
-        "{task.percentage:>3.0f}%", style="light_coral", markup=False, *args, **kwargs
-    )
+class TaskProgressColumn(rich.progress.TaskProgressColumn):
+    def __init__(
+        self,
+        text_format: str = "{task.percentage:>3.0f}%",
+        text_format_no_percentage: str = "",
+        style: str | Style = "light_coral",
+        justify: Literal["default", "left", "center", "right", "full"] = "left",
+        markup: bool = True,
+        highlighter: Highlighter | None = None,
+        table_column: Column | None = None,
+        show_speed: bool = True,
+    ) -> None:
+        super().__init__(
+            text_format,
+            text_format_no_percentage,
+            style,
+            justify,
+            markup,
+            highlighter,
+            table_column,
+            show_speed,
+        )
+
+    @classmethod
+    def render_speed(cls, speed: Optional[float]) -> Text:
+        """Render the speed in iterations per second.
+
+        Args:
+            task (Task): A Task object.
+
+        Returns:
+            Text: Text object containing the task speed.
+        """
+        if speed is None:
+            return Text("", style="progress.percentage")
+        unit, suffix = filesize.pick_unit_and_suffix(
+            int(speed),
+            ["", "×10³", "×10⁶", "×10⁹", "×10¹²"],
+            1000,
+        )
+        data_speed = speed / unit
+        return Text(f"{data_speed:.1f}{suffix} it/s", style="deep_pink1")
 
 
 class TimerColumn(rich.progress.TimeRemainingColumn):
@@ -89,8 +134,8 @@ class Progress(rich.progress.Progress):
     def get_default_columns(cls) -> tuple[rich.progress.ProgressColumn, ...]:
         return (
             rich.progress.TextColumn("[pink1]{task.description}"),
-            get_bar_column(),
-            get_task_progress_column(),
+            BarColumn(),
+            TaskProgressColumn(),
             TimerColumn(),
             rich.progress.TextColumn("[pink1]{task.fields[suffix]}"),
         )
@@ -130,7 +175,7 @@ def track(
 
     Args:
         sequence (Iterable[ProgressType]): A sequence (must support "len") you wish to iterate over.
-        description (str, optional): Description of task show next to progress bar. Defaults to "Working".
+        description (str, optional): Description of task show next to progress bar. Defaults to "Yeehaw...".
         total: (float, optional): Total number of steps. Default is len(sequence).
         auto_refresh (bool, optional): Automatic refresh, disable to force a refresh after each iteration. Default is True.
         transient: (bool, optional): Clear the progress on exit. Defaults to False.

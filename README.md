@@ -53,9 +53,8 @@ The class also supports iterating over the tags as well as selecting random colo
 The `Gradient` class inherits from `list` and can be used to easily apply an arbitrary number of color sweeps across text:
 ![](imgs/gradient.png)
 
-The `Progress` class and `track` function are the same as the `rich` versions, just with different default colors and columns.  
+The `Progress`, `BarColumn`, and `TaskProgressColumn` classes, as well as the `track` function are the same as the `rich` versions, just with different default colors, default columns, and additonal keyword arguments.  
 `TimerColumn` is a subclass of `rich.progress.TimeRemainingColumn` that displays `{time_elapsed}<->{time_remaining}` with a color gradient.  
-The progress bar and task progress columns with the altered default can be obtained with `get_bar_column()` and `get_task_progress_column`, respectively.  
 
 Default columns and colors of this version:
 ![](imgs/progress.gif)
