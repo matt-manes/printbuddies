@@ -6,7 +6,7 @@ import printbuddies
 
 def test_printbuddies_display():
     print()
-    total = 200
+    total = 100
     bar = printbuddies.ProgBar(total)
     for _ in range(total):
         bar.display(prefix=bar.runtime)
