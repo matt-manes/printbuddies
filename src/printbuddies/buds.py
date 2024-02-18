@@ -1,7 +1,7 @@
+import re
 from os import get_terminal_size
 from time import sleep
 from typing import Any
-import re
 
 import rich
 from noiftimer import Timer

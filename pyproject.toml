@@ -1,8 +1,8 @@
 [project]
 name = "printbuddies"
 description = "Various printing utilities and helpers/extenders for the `rich` package."
-version = "1.5.0"
-dependencies = ["noiftimer", "rich"]
+version = "2.0.0"
+dependencies = ["noiftimer", "rich", "typing_extensions"]
 readme = "README.md"
 keywords = ["terminal", "print", "printing", "progressbar"]
 classifiers = ["Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License", "Operating System :: OS Independent"]
@@ -25,7 +25,7 @@ addopts = ["--import-mode=importlib"]
 pythonpath = "src"
 
 [tool.hatch.build.targets.sdist]
-exclude = [".coverage", ".pytest_cache", ".vscode", "tests", "htmlcov","docs","*.md", "build_colormap.py","colormap_template.py","generate_colormap.py","imgs"]
+exclude = [".coverage", ".pytest_cache", ".vscode", "tests", "htmlcov", "docs", "*.md", "build_colormap.py", "colormap_template.py", "generate_colormap.py", "imgs"]
 
 [build-system]
 requires = ["hatchling"]
