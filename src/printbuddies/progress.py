@@ -1,16 +1,15 @@
 from datetime import timedelta
 from typing import Any, Callable, Iterable, Literal, Optional, Self, Sequence
 
+import rich
 import rich.progress
 from noiftimer import Timer
-from rich.console import Console
-from rich.highlighter import Highlighter
-from rich.progress import ProgressType
-from rich.style import Style, StyleType
-from rich.table import Column
-from rich.text import Text
+import rich.console
+import rich.highlighter
+import rich.style
+import rich.table
+import rich.text
 from rich import filesize
-
 from .gradient import Gradient
 
 
@@ -18,11 +17,11 @@ class BarColumn(rich.progress.BarColumn):
     def __init__(
         self,
         bar_width: int | None = 40,
-        style: str | Style = "sea_green1",
-        complete_style: str | Style = "deep_pink1",
-        finished_style: str | Style = "cornflower_blue",
-        pulse_style: str | Style = "deep_pink1",
-        table_column: Column | None = None,
+        style: str | rich.style.Style = "sea_green1",
+        complete_style: str | rich.style.Style = "deep_pink1",
+        finished_style: str | rich.style.Style = "cornflower_blue",
+        pulse_style: str | rich.style.Style = "deep_pink1",
+        table_column: rich.table.Column | None = None,
     ) -> None:
         super().__init__(
             bar_width, style, complete_style, finished_style, pulse_style, table_column
@@ -34,11 +33,11 @@ class TaskProgressColumn(rich.progress.TaskProgressColumn):
         self,
         text_format: str = "{task.percentage:>3.0f}%",
         text_format_no_percentage: str = "",
-        style: str | Style = "light_coral",
+        style: str | rich.style.Style = "light_coral",
         justify: Literal["default", "left", "center", "right", "full"] = "left",
         markup: bool = True,
-        highlighter: Highlighter | None = None,
-        table_column: Column | None = None,
+        highlighter: rich.highlighter.Highlighter | None = None,
+        table_column: rich.table.Column | None = None,
         show_speed: bool = True,
     ) -> None:
         super().__init__(
@@ -53,7 +52,7 @@ class TaskProgressColumn(rich.progress.TaskProgressColumn):
         )
 
     @classmethod
-    def render_speed(cls, speed: Optional[float]) -> Text:
+    def render_speed(cls, speed: Optional[float]) -> rich.text.Text:
         """Render the speed in iterations per second.
 
         Args:
@@ -63,14 +62,14 @@ class TaskProgressColumn(rich.progress.TaskProgressColumn):
             Text: Text object containing the task speed.
         """
         if speed is None:
-            return Text("", style="progress.percentage")
+            return rich.text.Text("", style="progress.percentage")
         unit, suffix = filesize.pick_unit_and_suffix(
             int(speed),
             ["", "×10³", "×10⁶", "×10⁹", "×10¹²"],
             1000,
         )
         data_speed = speed / unit
-        return Text(f"{data_speed:.1f}{suffix} it/s", style="deep_pink1")
+        return rich.text.Text(f"{data_speed:.1f}{suffix} it/s", style="deep_pink1")
 
 
 class TimerColumn(rich.progress.TimeRemainingColumn):
@@ -100,12 +99,12 @@ class TimerColumn(rich.progress.TimeRemainingColumn):
             time_elapsed = "0s"
         return time_elapsed
 
-    def render(self, task: rich.progress.Task) -> Text:
+    def render(self, task: rich.progress.Task) -> rich.text.Text:
         timing = self.get_time_elapsed(task)
         if not self.elapsed_only and (time_remaining := self.get_time_remaining(task)):
             timing += f" <-> {time_remaining}"
-            return Text().from_markup(Gradient().apply(timing))
-        return Text().from_markup(f"[pink1]{timing}")
+            return rich.text.Text().from_markup(Gradient().apply(timing))
+        return rich.text.Text().from_markup(f"[pink1]{timing}")
 
 
 class Progress(rich.progress.Progress):
@@ -155,22 +154,24 @@ class Progress(rich.progress.Progress):
 
 
 def track(
-    sequence: Sequence[ProgressType] | Iterable[ProgressType],
+    sequence: (
+        Sequence[rich.progress.ProgressType] | Iterable[rich.progress.ProgressType]
+    ),
     description: str = "Yeehaw...",
     total: Optional[float] = None,
     auto_refresh: bool = True,
-    console: Optional[Console] = None,
+    console: Optional[rich.console.Console] = None,
     transient: bool = False,
     get_time: Optional[Callable[[], float]] = None,
     refresh_per_second: float = 10,
-    style: StyleType = "sea_green1",
-    complete_style: StyleType = "deep_pink1",
-    finished_style: StyleType = "cornflower_blue",
-    pulse_style: StyleType = "deep_pink1",
+    style: rich.style.StyleType = "sea_green1",
+    complete_style: rich.style.StyleType = "deep_pink1",
+    finished_style: rich.style.StyleType = "cornflower_blue",
+    pulse_style: rich.style.StyleType = "deep_pink1",
     update_period: float = 0.1,
     disable: bool = False,
     show_speed: bool = True,
-) -> Iterable[ProgressType]:
+) -> Iterable[rich.progress.ProgressType]:
     """Track progress by iterating over a sequence.
 
     Args:
