@@ -14,8 +14,8 @@ def test__progress_Progress():
         while not progress.finished:
             time.sleep(0.01)
             progress.update(task, advance=1)
-    with printbuddies.Progress(description_last=True) as progress:
-        task = progress.add_task(f"<>ProggyWoggy<>", total=500)
+    with printbuddies.Progress() as progress:
+        task = progress.add_task(suffix=f"<>ProggyWoggy<>", total=500)
         while not progress.finished:
             time.sleep(0.01)
             progress.update(task, advance=1)

@@ -1,5 +1,5 @@
 from datetime import timedelta
-from typing import Any, Callable, Iterable, Optional, Sequence
+from typing import Any, Callable, Iterable, Optional, Sequence, Self
 
 import rich.progress
 from noiftimer import Timer
@@ -81,6 +81,10 @@ class Progress(rich.progress.Progress):
         description_last (bool, optional): When using the default columns, the description column will be after the bar instead of before.
     """
 
+    def __enter__(self) -> Self:
+        self.start()
+        return self
+
     @classmethod
     def get_default_columns(cls) -> tuple[rich.progress.ProgressColumn, ...]:
         return (
@@ -93,7 +97,7 @@ class Progress(rich.progress.Progress):
 
     def add_task(
         self,
-        description: str,
+        description: str = "",
         start: bool = True,
         total: float | None = 100,
         completed: int = 0,
