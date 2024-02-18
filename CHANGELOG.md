@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.0.1 (2024-02-18)
+
+#### Refactorings
+
+* change default pulse style
+
+
 ## v2.0.0 (2024-02-17)
 
 #### New Features
