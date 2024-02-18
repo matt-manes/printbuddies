@@ -148,23 +148,7 @@ def track(
 
     """
 
-    columns: list[rich.progress.ProgressColumn] = (
-        [rich.progress.TextColumn("[pink1][progress.description]{task.description}")]
-        if description
-        else []
-    )
-    columns.extend(
-        (
-            rich.progress.BarColumn(
-                style=style,
-                complete_style=complete_style,
-                finished_style=finished_style,
-                pulse_style=pulse_style,
-            ),
-            get_task_progress_column(show_speed=show_speed),
-            TimerColumn(elapsed_when_finished=True, elapsed_only=True),
-        )
-    )
+    columns = list(Progress.get_default_columns())
     progress = Progress(
         *columns,
         auto_refresh=auto_refresh,
