@@ -81,38 +81,6 @@ class Progress(rich.progress.Progress):
         description_last (bool, optional): When using the default columns, the description column will be after the bar instead of before.
     """
 
-    def __init__(
-        self,
-        *columns: str | rich.progress.ProgressColumn,
-        console: Console | None = None,
-        auto_refresh: bool = True,
-        refresh_per_second: float = 10,
-        speed_estimate_period: float = 30,
-        transient: bool = False,
-        redirect_stdout: bool = True,
-        redirect_stderr: bool = True,
-        get_time: Callable[[], float] | None = None,
-        disable: bool = False,
-        expand: bool = False,
-        description_last: bool = False,
-    ) -> None:
-        super().__init__(
-            *columns,
-            console=console,
-            auto_refresh=auto_refresh,
-            refresh_per_second=refresh_per_second,
-            speed_estimate_period=speed_estimate_period,
-            transient=transient,
-            redirect_stdout=redirect_stdout,
-            redirect_stderr=redirect_stderr,
-            get_time=get_time,
-            disable=disable,
-            expand=expand,
-        )
-        if not columns and description_last:
-            description = self.columns[0]
-            self.columns = self.columns[1:] + (description,)
-
     @classmethod
     def get_default_columns(cls) -> tuple[rich.progress.ProgressColumn, ...]:
         return (
