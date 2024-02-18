@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.0.3 (2024-02-18)
+
+#### Refactorings
+
+* clean up namespace by condensing imports
+* override `BarColumn` and `TaskProgressColumn` instead of using get functions
+
+
 ## v2.0.2 (2024-02-18)
 
 #### Fixes
