@@ -1,15 +1,9 @@
 from .buds import ProgBar, Spinner, clear, print_in_place, ticker
 from .colormap import ColorMap, Tag
 from .gradient import RGB, Gradient
-from .progress import (
-    Progress,
-    TimerColumn,
-    BarColumn,
-    TaskProgressColumn,
-    track,
-)
+from .progress import BarColumn, Progress, TaskProgressColumn, TimerColumn, track
 
-__version__ = "2.0.2"
+__version__ = "2.0.3"
 
 __all__ = [
     "track",

@@ -2,14 +2,15 @@ from datetime import timedelta
 from typing import Any, Callable, Iterable, Literal, Optional, Self, Sequence
 
 import rich
-import rich.progress
-from noiftimer import Timer
 import rich.console
 import rich.highlighter
+import rich.progress
 import rich.style
 import rich.table
 import rich.text
+from noiftimer import Timer
 from rich import filesize
+
 from .gradient import Gradient
 
 
