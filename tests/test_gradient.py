@@ -1,6 +1,6 @@
 import random
 from typing import Any
-
+from math import isclose
 import pytest
 
 import printbuddies
@@ -39,31 +39,28 @@ def test__RGB_from_name():
     assert color.b
 
 
-def test___gradient_Blender():
+@pytest.mark.parametrize("steps", [2, 22, 101, 35927])
+def test___Blender__get_sequence(steps: int):
     blender = printbuddies.gradient._Blender(  # type:ignore
-        printbuddies.RGB(100, 100, 100), printbuddies.RGB(200, 200, 200)
+        printbuddies.RGB(51, 101, 231), printbuddies.RGB(113, 21, 254)
     )
-    text = "01234 567\t89\n0"
-    steps = blender._get_num_steps(text)  # type:ignore
-    step_sizes = blender._get_step_sizes(steps)  # type:ignore
-    assert step_sizes == printbuddies.RGB(10, 10, 10)
-    midcolor = blender._get_blended_color(5, step_sizes)  # type:ignore
-    assert midcolor == printbuddies.RGB(150, 150, 150)
-    richtext = blender.apply(text)
-    assert richtext.startswith(str(blender.start))
-    assert richtext.endswith(f"{blender.stop}{text[-1]}[/]")
+    sequence = blender.get_sequence(steps)  # type: ignore
+    for i, color in [(0, blender.start), (-1, blender.stop)]:
+        assert str(sequence[i]) == str(color)
 
 
 @pytest.mark.parametrize(
-    "start, stop",
+    "colors",
     [
-        (printbuddies.ColorMap().grey0, printbuddies.ColorMap().grey100),
-        ("grey0", "grey100"),
+        ([printbuddies.ColorMap().grey0, printbuddies.ColorMap().grey100]),
+        (["grey0", "grey100"]),
+        (["pink1", "green", "orchid1", "bright_red", (0, 0, 255)]),
+        (["pink1", "turquoise2", "red"]),
     ],
 )
-def test__Gradient__parse(start: Any, stop: Any):
-    gradient = printbuddies.Gradient([start, stop])
-    text = "01234567890"
+def test__Gradient__parse(colors: list[Any]):
+    gradient = printbuddies.Gradient(colors)
+    text = "0123456789 013asdfas dseifjs; lofie"
     richtext = gradient.apply(text)
     assert richtext.startswith(str(gradient[0]))
     assert richtext.endswith(f"{gradient[-1]}{text[-1]}[/]")
@@ -106,10 +103,19 @@ def test__Gradient___set_item__():
     assert gradient[1].name == "pink1"
 
 
+def test__Gradient__get_sequence():
+    gradient = printbuddies.Gradient(["red", "orange1", "blue", "pink1", "green"])
+    sequence = gradient.get_sequence(13)
+    check: list[str] = [str(color) for color in sequence]
+    assert len(sequence) == len(set(check))
+
+
 def test__Gradient_more_colors_than_text():
     colors = printbuddies.ColorMap()
     text = "Just some sample text to do a lil testing on."
     gradient = printbuddies.Gradient(
         [random.choice(colors) for _ in range(len(text) + 10)]
     )
-    gradient.apply(text)
+    import rich
+
+    rich.print(gradient.apply(text))
