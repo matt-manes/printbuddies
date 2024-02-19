@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.1.0 (2024-02-18)
+
+#### New Features
+
+* add `Grid` class
+#### Performance improvements
+
+* calculate gradient sequence without needing to split text into batches
+
+
 ## v2.0.3 (2024-02-18)
 
 #### Refactorings
