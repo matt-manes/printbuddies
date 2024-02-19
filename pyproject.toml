@@ -1,7 +1,7 @@
 [project]
 name = "printbuddies"
 description = "Various printing utilities and helpers/extenders for the `rich` package."
-version = "2.0.3"
+version = "2.1.0"
 dependencies = ["noiftimer", "rich", "typing_extensions"]
 readme = "README.md"
 keywords = ["terminal", "print", "printing", "progressbar"]

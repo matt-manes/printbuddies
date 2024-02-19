@@ -1,6 +1,7 @@
 import random
-from typing import Any
 from math import isclose
+from typing import Any
+
 import pytest
 
 import printbuddies

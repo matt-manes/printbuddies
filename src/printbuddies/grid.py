@@ -1,8 +1,10 @@
-import rich.table
-from .gradient import Gradient, ColorType
+from typing import Iterable, Mapping, Sequence
+
 import rich
 import rich.style
-from typing import Sequence, Mapping, Iterable
+import rich.table
+
+from .gradient import ColorType, Gradient
 
 
 class Grid:
