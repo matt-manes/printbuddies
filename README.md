@@ -58,3 +58,15 @@ The `Progress`, `BarColumn`, and `TaskProgressColumn` classes, as well as the `t
 
 Default columns and colors of this version:
 ![](imgs/progress.gif)
+
+The `Grid` class is a customized implementation of a `rich` Table.  
+It can minimally be used by passing a list of dictionaries to the constructor and then passing the instance
+to `rich.print` or `rich.console.Console().print`.  
+(All dictionaries should have the same set of keys)
+<pre>
+from printbuddies import Grid
+from rich import print
+print(Grid(list_of_dicts))
+</pre>
+Being used to display a database schema:
+![](imgs/grid.png)
