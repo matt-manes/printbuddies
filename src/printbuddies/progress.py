@@ -32,7 +32,7 @@ class BarColumn(rich.progress.BarColumn):
 class TaskProgressColumn(rich.progress.TaskProgressColumn):
     def __init__(
         self,
-        text_format: str = "{task.percentage:>3.0f}%",
+        text_format: str = "{task.percentage:.2f}%",
         text_format_no_percentage: str = "",
         style: str | rich.style.Style = "light_coral",
         justify: Literal["default", "left", "center", "right", "full"] = "left",
