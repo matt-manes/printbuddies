@@ -4,7 +4,7 @@ from .gradient import RGB, Gradient
 from .grid import Grid
 from .progress import BarColumn, Progress, TaskProgressColumn, TimerColumn, track
 
-__version__ = "2.1.0"
+__version__ = "2.1.1"
 
 __all__ = [
     "track",
