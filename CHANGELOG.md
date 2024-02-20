@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.1.1 (2024-02-20)
+
+#### Refactorings
+
+* change `TaskProgressColumn` default significant digits
+
+
 ## v2.1.0 (2024-02-18)
 
 #### New Features
