@@ -1,9 +1,9 @@
-from typing import Iterable, Mapping, Sequence, Any
+from typing import Any, Iterable, Mapping, Sequence
 
 import rich
+import rich.console
 import rich.style
 import rich.table
-import rich.console
 
 from .gradient import ColorType, Gradient
 
