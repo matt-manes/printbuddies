@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.2 (2024-02-20)
+
+#### Refactorings
+
+* add additional `__init__` args
+
 ## v2.1.1 (2024-02-20)
 
 #### Refactorings
