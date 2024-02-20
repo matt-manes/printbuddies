@@ -1,8 +1,9 @@
-from typing import Iterable, Mapping, Sequence
+from typing import Iterable, Mapping, Sequence, Any
 
 import rich
 import rich.style
 import rich.table
+import rich.console
 
 from .gradient import ColorType, Gradient
 
@@ -22,6 +23,9 @@ class Grid:
         row_colors: Iterable[ColorType] = ["pink1", "cornflower_blue"],
         gradient_rows: bool = True,
         cast_values_to_strings: bool = False,
+        title_justify: rich.console.JustifyMethod = "center",
+        caption_justify: rich.console.JustifyMethod = "center",
+        show_header: bool = True,
     ):
         """
         If `gradient_rows` is `True`, `row_colors` will be applied as a gradient across rows instead of alternating colors.
@@ -50,6 +54,9 @@ class Grid:
             row_styles=row_colors,
             title=title,
             caption=caption,
+            show_header=show_header,
+            title_justify=title_justify,
+            caption_justify=caption_justify,
         )
         for datum in data:
             self.table.add_row(*datum.values())
