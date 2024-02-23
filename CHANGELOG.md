@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.1.3 (2024-02-22)
+
+#### Refactorings
+
+* import `typing_extensions` instead of `typing`
+
+
 ## v2.1.2 (2024-02-20)
 
 #### Refactorings
