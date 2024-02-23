@@ -1,5 +1,4 @@
 from datetime import timedelta
-from typing_extensions import Any, Callable, Iterable, Literal, Optional, Self, Sequence
 
 import rich
 import rich.console
@@ -10,6 +9,7 @@ import rich.table
 import rich.text
 from noiftimer import Timer
 from rich import filesize
+from typing_extensions import Any, Callable, Iterable, Literal, Optional, Self, Sequence
 
 from .gradient import Gradient
 
