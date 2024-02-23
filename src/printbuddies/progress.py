@@ -1,5 +1,5 @@
 from datetime import timedelta
-from typing import Any, Callable, Iterable, Literal, Optional, Self, Sequence
+from typing_extensions import Any, Callable, Iterable, Literal, Optional, Self, Sequence
 
 import rich
 import rich.console
